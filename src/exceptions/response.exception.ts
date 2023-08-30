@@ -1,3 +1,4 @@
+import { Request, Response } from '@/interfaces/fastify.interface';
 import {
   ExceptionFilter,
   Catch,
@@ -5,7 +6,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 
 @Catch()
 export class ResponseExceptionFilter implements ExceptionFilter {
@@ -18,7 +18,7 @@ export class ResponseExceptionFilter implements ExceptionFilter {
         ? error.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(status).json({
+    response.status(status).send({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,

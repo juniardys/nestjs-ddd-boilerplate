@@ -1,12 +1,12 @@
+import path from 'path';
+
+import { LogLevel } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
-import { LogLevel } from '@nestjs/common';
-
-import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
 import { IAwsConfig } from '@/interfaces/aws.interface';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
-import path from 'path';
 
 export class SettingService {
   constructor() {
@@ -145,41 +145,6 @@ export class SettingService {
       prefix: this.get('REDIS_PREFIX') || 'nest_cache:',
       connectionName: this.get('REDIS_CONNECTION_NAME') || 'NEST_CACHE',
       ttl: this.get('REDIS_TTL') || 3600,
-      cacheTTL: {
-        searchPlaceholder:
-          this.getNumber('REDIS_CACHE_TTL_SEARCH_PLACEHOLDER') || 86400,
-      },
-      enable: {
-        searchPlaceholder:
-          this.get('REDIS_ENABLE_SEARCH_PLACEHOLDER') == 'true' || false,
-      },
-    };
-  }
-
-  get newrelic() {
-    return {
-      enabled: this.get('NEWRELIC_ENABLED') == 'true' || false,
-      appName: this.get('NEWRELIC_APP_NAME') || this.get('APP_NAME'),
-      licenseKey: this.get('NEWRELIC_LICENSE_KEY'),
-      log: {
-        level: this.get('NEWRELIC_LOG_LEVEL'),
-      },
-      distributeTracing: {
-        enabled:
-          this.get('NEWRELIC_DISTRIBUTE_TRACING_ENABLED') == 'true' || false,
-      },
-      transactionTracer: {
-        enabled: this.get('NEWRELIC_TRANSACTION_ENABLED') == 'true' || false,
-        recordSQL: this.get('NEWRELIC_TRANSACTION_RECORD_SQL'),
-        explainThreshold: this.get('NEWRELIC_TRANSACTION_EXPLAIN_THRESHOLD'),
-      },
-      slowSql: {
-        enabled: this.get('NEWRELIC_SLOW_SQL_ENABLED') == 'true' || false,
-        maxSamples: this.get('NEWRELIC_SLOW_SQL_MAX_SAMPLES'),
-      },
-      blacklist: this.get('NEWRELIC_BLACKLIST_ROUTES')
-        ? this.get('NEWRELIC_BLACKLIST_ROUTES').split(',')
-        : [],
     };
   }
 
@@ -228,6 +193,7 @@ export class SettingService {
       secretAccessKey: this.get('AWS_S3_SECRET_ACCESS_KEY'),
       bucketName: this.get('S3_BUCKET_NAME'),
       publicUrl: this.get('S3_PUBLIC_URL'),
+      defaultLinkImageSavedPath: this.get('S3_DEFAULT_LINK_IMAGE_SAVED_PATH'),
     };
   }
 

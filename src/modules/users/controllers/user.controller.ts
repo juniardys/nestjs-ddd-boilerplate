@@ -1,17 +1,19 @@
 import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
-
 import { UserService } from '@/modules/users/services/user.service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiCustomHeader } from '@/shared/swagger/decorator';
+import { ResponseSuccessInterceptor } from '@/interceptors/response.interceptor';
+import { ResponseMessage } from '@/common/decorators/response.decorator';
 
 @ApiTags('Users')
 @ApiCustomHeader()
 @Controller('users')
-// @UseInterceptors(ApiResponse)
+@UseInterceptors(ResponseSuccessInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/')
+  @ResponseMessage('Successfully retrieved!')
   async getAllUsers() {
     return this.userService.getAllUsers();
   }

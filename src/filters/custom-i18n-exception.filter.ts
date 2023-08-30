@@ -46,8 +46,7 @@ export class CustomI18nValidationExceptionFilter implements ExceptionFilter {
           .status(this.options.errorHttpStatusCode || exception.getStatus())
           .send({
             status: 'Error',
-            statusCode:
-              this.options.errorHttpStatusCode || exception.getStatus(),
+            statusCode: this.options.errorHttpStatusCode || statusCode,
             errorCode: 1000,
             message: exception.getResponse(),
             payload: this.propertyKeyValidationErrors(errors),

@@ -11,14 +11,17 @@ import {
   ClassSerializerInterceptor,
   ValidationPipe,
 } from '@nestjs/common';
+import { i18nValidationErrorFactory } from 'nestjs-i18n';
 
 import { AppModule } from './app.module';
 import { SharedModule } from './shared.module';
 import { SettingService } from './shared/services/setting.service';
 import { setupSwagger } from './shared/swagger/setup';
-import { NewrelicInterceptor } from './interceptors/newrelic.interceptor';
 import { CustomI18nValidationExceptionFilter } from './filters/custom-i18n-exception.filter';
-import { i18nValidationErrorFactory } from 'nestjs-i18n';
+import { ContextRequestInterceptor } from './interceptors/context-request.interceptor';
+import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { LoggerService } from './shared/services/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -30,21 +33,13 @@ async function bootstrap() {
   );
 
   const settingService = app.select(SharedModule).get(SettingService);
-  let globalInterceptors: NestInterceptor[] = [
-    // new ContextRequestInterceptor(settingService),
+  const globalInterceptors: NestInterceptor[] = [
+    new ContextRequestInterceptor(settingService),
     new ClassSerializerInterceptor(app.get(Reflector)),
   ];
 
-  // NEWRELIC
-  if (settingService.newrelic.enabled) {
-    globalInterceptors = [
-      ...globalInterceptors,
-      new NewrelicInterceptor(settingService),
-    ];
-  }
-
-  // const loggerService = app.select(SharedModule).get(LoggerService);
-  // app.useLogger(loggerService);
+  const loggerService = app.select(SharedModule).get(LoggerService);
+  app.useLogger(loggerService);
   // if (settingService.log.morgan.enabled) {
   //   app.use(
   //     morgan('combined', {
@@ -71,8 +66,8 @@ async function bootstrap() {
   }
 
   app.useGlobalFilters(
-    // new NotFoundExceptionFilter(loggerService),
-    // new HttpExceptionFilter(loggerService),
+    new NotFoundExceptionFilter(loggerService),
+    new HttpExceptionFilter(loggerService),
     new CustomI18nValidationExceptionFilter(),
   );
 
@@ -87,12 +82,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  // app.enableVersioning({
-  //   type: VersioningType.HEADER,
-  //   header: settingService.app.versionKey,
-  //   defaultVersion: settingService.app.versionDefault || VERSION_NEUTRAL,
-  // });
 
   if (['development', 'staging'].includes(settingService.nodeEnv)) {
     setupSwagger(app, settingService.swaggerConfig);

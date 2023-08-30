@@ -1,9 +1,9 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import * as winston from 'winston';
+import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
+import { Request } from '@/interfaces/fastify.interface';
 
 import { SettingService } from './setting.service';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces/features/arguments-host.interface';
-import { Request, Response } from 'express';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger {
@@ -46,7 +46,7 @@ export class LoggerService extends ConsoleLogger {
       contextName: string;
     },
   ) {
-    const response = meta.httpContext.getResponse<Response>();
+    // const response = meta.httpContext.getResponse<Response>();
     const request = meta.httpContext.getRequest<Request>();
     const formatted = {
       headers: request.headers,

@@ -1,0 +1,15 @@
+{
+    "NOT_EMPTY": "{property} tidak boleh kosong",
+    "INVALID_EMAIL": "format email tidak sesuai",
+    "INVALID_BOOLEAN": "{property} is not a boolean",
+    "MIN": "{property} with value: \"{value}\" needs to be at least {constraints.0}, ow and {message}",
+    "MAX": "{property} with value: \"{value}\" needs to be less than {constraints.0}, ow and {message}",
+    "EMAIL_EXISTS": "email sudah ada",
+    "CONFIRM_PASSWORD_NOT_MATCH": "konfirmasi password tidak sama",
+    "INVALID_STRING": "{property} harus berupa huruf",
+    "INVALID_DATETIME": "{property} bukan merupakan tanggal yang valid",
+    "IS_NUMBER": "{property} harus angka",
+    "IS_ENUM": "{property} harus berupa nilai pilihan yang valid",
+    "IS_STRING": "{property} harus berupa teks",
+    "IS_ARRAY": "{property} harus berupa array"
+}

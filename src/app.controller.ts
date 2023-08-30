@@ -6,9 +6,7 @@ import { AppService } from './app.service';
 @Controller('/')
 @ApiTags('hello-world')
 export class AppController {
-  constructor(
-    private readonly _appService: AppService,
-  ) {}
+  constructor(private readonly _appService: AppService) {}
 
   @Get('/')
   @HttpCode(HttpStatus.OK)

@@ -5,4 +5,5 @@ export interface IAwsConfig {
   secretAccessKey: string;
   bucketName: string;
   publicUrl: string;
+  defaultLinkImageSavedPath: string;
 }

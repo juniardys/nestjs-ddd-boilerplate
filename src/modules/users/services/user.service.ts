@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { UserRepository } from '@/modules/users/repository/user.repository';
 
 @Injectable()

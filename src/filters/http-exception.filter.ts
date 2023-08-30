@@ -5,7 +5,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request, Response } from '@/interfaces/fastify.interface';
 
 import { LoggerService } from '../shared/services/logger.service';
 
@@ -22,15 +22,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const statusCode = exception.getStatus
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
-      const errorCode =
-        typeof exceptionResponse === 'object'
-          ? (exceptionResponse as any).errorCode
-          : statusCode;
 
       const errorResponse = {
-        status: 'Error',
-        statusCode,
-        errorCode,
+        success: false,
+        status: statusCode,
         message:
           typeof exceptionResponse === 'object'
             ? (exceptionResponse as any).message
@@ -51,7 +46,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         },
       );
 
-      return response.status(statusCode).json(errorResponse);
+      return response.status(statusCode).send(errorResponse);
     } else {
       // GRAPHQL Exception
       // const gqlHost = GqlArgumentsHost.create(host);
